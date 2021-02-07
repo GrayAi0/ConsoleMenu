@@ -1,7 +1,7 @@
 # ConsoleMenu Beta
 <h3>
     This is just a beta version<br>
-    <small>For now you have to install this package manually because i have to learn how to use pip(:</small>
+    <small>For now you have to install this package manually because i have to learn how to use pip -/(:</small>
 </h3>
 
 # How to use
@@ -38,7 +38,7 @@ new_settings["right-character"] = "]"
 # To applay this settings do this steps
 
 # When you create a new menu 
-# Just but the new_settings into the class init
+# Just put the new_settings into the class init
 itemMenu = Menu('Items', (0,), settings=new_settings)
 
 
@@ -92,7 +92,7 @@ def getValuesForStyle(key):
             '_',
             '+',
             '=',
-            'ـ', # this could be not work
+            'ـ', # This may be not work
             '~',
 #            ...
         ]
