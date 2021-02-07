@@ -4,19 +4,17 @@ import cursor
 
 from . import keyboardhandler
 from . import render
-from . import menuitem
-from . import options as pkg_options
+from . import settings as pkg_settings
+from . import colorama
 from .commontools import *
-import colorama as __in
-__in.init()
 
 class Menu:
 
-    def __init__(self, name, pos, options={}):
+    def __init__(self, name, pos, settings={}):
 
         self.name = name
         self.pos = pos
-        self.options = Dict.beshure(options, pkg_options.default_menu_options)
+        self.settings = Dict.beshure(settings, pkg_settings.default_menu_settings)
 
         self.items = []
         self.selected_item = 0
@@ -30,7 +28,7 @@ class Menu:
         self._key_inited = False
         self._registered_keys = []
 
-    def AppendItem(self, obj):
+    def appendItem(self, obj):
         self.items.append(obj)
         obj.index = len(self.items)-1
         obj.menuAPI = self
@@ -41,11 +39,17 @@ class Menu:
         message = ''
         for msg in messages:
             for chr in msg:
-                message += ' ' if chr != '\n' else '\n'
-                print(chr, end='')
+
+
+                if isinstance(chr, str):
+                    message += " " if chr != '\n' else '\n'
+                    print(chr, end='')
+                elif isinstance(chr, tuple):
+                    message += " " if chr != '\n' else '\n'
+                    print(chr[0])
 
             print(sep, end='')
-        self.ghostmessage = message + end
+        self.ghostmessage += message + end
 
     def clearghost(self, amount):
         print('\033[A' * (Str.getLenof('\n', amount) - 1), end='')
@@ -53,33 +57,60 @@ class Menu:
     def _rendermenu(self):
         self.clearghost(self.ghostmessage)
         self.ghostmessage = ''
-        w, h = self.options.get("minimal_width", 0), self.options.get("minimal_height", 0)
-        tc, lc, rc, bc = self.options.get("top-character", '0'), self.options.get("left-character", '1'), self.options.get("right-character", '2'), self.options.get("bottom-character", '3')
+        w, h = self.settings.get("minimal_width", 0), self.settings.get("minimal_height", 0)
+        tc, lc, rc, bc = self.settings.get("top-character", '0'), self.settings.get("left-character", '1'), self.settings.get("right-character", '2'), self.settings.get("bottom-character", '3')
 
-        write = render.createLine(tc, w+2) + '\n'
+        write = []
+
+        write.extend([render.createLine(tc, w), '\n'])
 
         ldived = render.createLine(' ', int((w - len(self.name)) / 2))
         rdived = render.createLine(' ', int((w - len(self.name)) / 2) + (1 if len(self.name) % 2 != 0 else 0))
-        write += f"{lc}{ldived}{self.name}{rdived}{rc}" + '\n'
+        write.extend([f"{lc}{ldived}{self.name}{rdived}{rc}", '\n'])
 
-        write += render.createLine(tc, w+2) + '\n'
+        write.extend([' ', render.createLine(tc, w), '\n'])
 
 
         _h = 0
         for index, item in enumerate(self.items):
-            renditem = item.render(self.options, w)
+            is_selected_item = self.selected_item == index
+
+            renditem = item.render(self.settings, w)
             sep = render.createLine(' ', w)
-            write += f"{lc}{sep}{rc}" + '\n'
-            write += f"{renditem}  {'<-' if self.selected_item == index else '  '}" + '\n'
+
+            write.extend([
+                lc,
+                sep,
+                rc,
+                '\n'
+            ])
+
+            write.extend([
+                lc,
+                (is_selected_item and (colorama.Fore.BLACK + colorama.Back.WHITE) or '',),
+                f"{renditem}",
+                (is_selected_item and (colorama.Fore.RESET + colorama.Back.RESET) or '',),
+                rc,
+                '<-' if is_selected_item else '  ',
+                '\n'
+            ])
+
+            write.extend([
+                lc,
+                sep,
+                rc,
+                '\n'
+            ])
+
             _h += Str.getLenof('\n', renditem) + 2
-            write += f"{lc}{sep}{rc}" + '\n'
+
         if h - _h > 0:
             for _ in range(h - _h):
                 sep = render.createLine(' ', w)
-                write += f"{lc}{sep}{rc}" + '\n'
+                write.extend([f"{lc}{sep}{rc}", '\n'])
 
-        write += render.createLine(bc, w+2) + '\n'
-        self.writeghost(write)
+        write.extend([render.createLine(bc, w+2), '\n'])
+        self.writeghost(*write, sep='')
 
     def _up(self):
         if self._isLocked:
@@ -119,7 +150,7 @@ class Menu:
         self._registered_keys.append([keyboardhandler.addkeylisnter('down', self._down), 'down'])
         self._registered_keys.append([keyboardhandler.addkeylisnter('right', self._click), 'right'])
 
-    def loop(self):
+    def run_pool(self):
 
         if not self._key_inited:
             self._register_keys()
@@ -151,7 +182,7 @@ class Menu:
         for msg in self.ghostmessage:
             print(msg, end='')
 
-        print('\033[A' * (Str.getLenof('\n', self.ghostmessage)), end='')
+        print('\033[A' * (Str.getLenof('\n', self.ghostmessage) - 1), end='')
 
     def show(self):
         self._rendermenu()
