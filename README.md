@@ -1,7 +1,7 @@
 # ConsoleMenu Beta
 <h3>
     This is just a beta version<br>
-    <small>For now you have to install this package manually because i have to learn how to use pip -/(:</small>
+    <small>For now you have to install this package manually because i have to learn how to use pip (:</small>
 </h3>
 
 # How to use
@@ -92,7 +92,7 @@ def getValuesForStyle(key):
             '_',
             '+',
             '=',
-            'ـ', # This may be not work
+            'ـ', # This may not work
             '~',
 #            ...
         ]
