@@ -1,8 +1,19 @@
-# ConsoleMenu Beta
-<h3>
-    This is just a beta version<br>
-    <small>For now you have to install this package manually because i have to learn how to use pip (:</small>
-</h3>
+
+# Change log
+<h2>ConsoleMenu v1.0.0</h2>
+
+- fixed: Sub-menu issues.
+- fixed: Performance improved.
+- update: New render method.
+- update: More color options.
+
+# menu design
+<h3>Light Menu</h3>
+* ligh mode running in windows Command Prompt
+![Light mode by default](https://github.com/GrayAi0/ConsoleMenu/blob/main/review/Menu-light-mode.png?raw=true)
+<h3>Dark Menu</h3>
+* dark mode running in Windows PowerShell
+![Dark mode by default](https://github.com/GrayAi0/ConsoleMenu/blob/main/review/Menu-dark-mode.png?raw=true)
 
 # How to use
 Import things you need

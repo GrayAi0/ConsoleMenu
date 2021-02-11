@@ -25,10 +25,11 @@ class Button(Item):
 
     def render(self, rendersettings: dict, width) -> str:
 
-        ldived = render.createLine(' ', int((width-len(self.text)-(len(str(self.index+1))+4))/2))
-        rdived = render.createLine(' ', int((width-len(self.text)-(len(str(self.index+1))+4))/2) + (1 if len(self.text) % 2 == 0 else 0))
+        ldived = render.createLine(' ', int((width - len(self.text) - (len(str(self.index + 1)) + 4)) / 2))
+        rdived = render.createLine(' ', int((width - len(self.text) - (len(str(self.index + 1)) + 4)) / 2) + (
+            0 if len(self.text) % 2 == 0 else 1))
 
-        button = f"  [{self.index+1}]{ldived}{self.text}{rdived}"
+        button = f"  [{self.index + 1}]{ldived}{self.text}{rdived}"
         return button
 
     def clicked(self):
@@ -51,7 +52,7 @@ class CheckBox(Item):
         status = f'[{self.status and "On" or "Off"}]'
         ldived = render.createLine(' ', int((width - len(self.text) - (len(str(self.index + 1)) + 4)) / 2))
         rdived = render.createLine(' ', int((width - len(self.text) - (len(str(self.index + 1)) + 4)) / 2) + (
-            1 if len(self.text) % 2 == 0 else 0) - (len(status) + 2))
+            1 if len(self.text) % 2 == 0 else 0) - (len(status) + 1))
 
         button = f"  [{self.index + 1}]{ldived}{self.text}{rdived} {status} "
         return button
@@ -74,15 +75,8 @@ class SubMenu(Menu):
     def _return(self):
         super()._remove_keys_handlers()
 
-        menulen = Str.getLenof('\n', self.ghostmessage)
 
-        print('\033[A' * (menulen - 1), end='')
-        for msg in self.ghostmessage:
-            print(msg, end='')
-
-        print('\033[A' * (menulen - Str.getLenof('\n', self.menuAPI.ghostmessage)- 1), end='')
-
-
+        self.hide()
         self.menuAPI.unlock()
         self.menuAPI.show()
 
@@ -90,7 +84,7 @@ class SubMenu(Menu):
 
         ldived = render.createLine(' ', int((width - len(self.text) - (len(str(self.index + 1)) + 4)) / 2))
         rdived = render.createLine(' ', int((width - len(self.text) - (len(str(self.index + 1)) + 4)) / 2) + (
-            1 if len(self.text) % 2 == 0 else 0) - 3)
+            1 if len(self.text) % 2 == 0 else 0) - 4)
 
         button = f"  [{self.index + 1}]{ldived}{self.text}{rdived}=> "
         return button

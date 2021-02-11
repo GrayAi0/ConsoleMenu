@@ -14,13 +14,10 @@ events_stream = open('events.log', 'w')
 
 def _create_handler(key):
     def trigger():
-        print("Triggered", key, file=events_stream)
+
         for handler in list(keys[key]["cbs"]):
-            print("Call", handler, file=events_stream)
-            try:
-                callable(handler) and handler() or None
-            except Exception as err:
-                print('[err]', err)
+            callable(handler) and handler() or None
+
     return trigger
 
 def addkeylisnter(key, handler):
