@@ -73,7 +73,7 @@ def tms(status):
 
 def getValuesForStyle(key):
     if key in ["minimal_width", "minimal_height"]:
-        return [i for i in range(0, 32)]
+        return [i for i in range(pkg_settings.default_menu_settings[key], pkg_settings.default_menu_settings[key] * 4)]
     
     if key in ['left-character', 'right-character']:
         isright = key == 'right-character'
@@ -112,6 +112,9 @@ stylemenu = SubMenu("Styles", None, "Style Menu")
 
 for key, value in zip(pkg_settings.default_menu_settings.keys(), pkg_settings.default_menu_settings.values()):
     
+    if key in ['maximal_width', 'maximal_height']:
+        continue
+
     def style_change(key):
         chrs = characters[key]
         chrs['index'] += 1
