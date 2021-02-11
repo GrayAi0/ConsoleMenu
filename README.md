@@ -63,21 +63,13 @@ itemMenu._rendermenu() # Render the menu to view the new settings
 
 ```py
 from ConsoleMenu.menu import Menu
-import ConsoleMenu.settings as pkg_settings
 from ConsoleMenu.items.natives import *
-
+import ConsoleMenu.settings as pkg_settings
 
 characters = {}
 
 def tms(status):
-    newsettings = dict(pkg_settings.default_menu_settings)
-
-    if status:
-        newsettings["left-character"] = "I"
-        newsettings["right-character"] = "I"
-
-    menu.settings = newsettings
-    menu._rendermenu()
+    print(status)
 
 def getValuesForStyle(key):
     if key in ["minimal_width", "minimal_height"]:
@@ -89,10 +81,10 @@ def getValuesForStyle(key):
             '|',
             ':',
             '!',
-            '[' if not isright else ']'
-            '(' if not isright else ')'
-            '{' if not isright else '}'
-            '<' if not isright else '>'
+            ('[' if not isright else ']'),
+            ('(' if not isright else ')'),
+            ('{' if not isright else '}'),
+            ('<' if not isright else '>'),
 #            ...
 
         ]
@@ -103,7 +95,7 @@ def getValuesForStyle(key):
             '_',
             '+',
             '=',
-            'ـ', # This may not work
+            'ـ', # This could be not work
             '~',
 #            ...
         ]
@@ -138,13 +130,14 @@ for key, value in zip(pkg_settings.default_menu_settings.keys(), pkg_settings.de
         "index": 0 ,
         "values": values
     }
+    
     vkey = key.replace('-', ' ').replace('_', ' ')
     vkey = ''.join([vkey[0].upper(), *list(vkey)[1:]])
 
     stylemenu.appendItem(Button(vkey, style_change, call_params=(key,)))
 
 menu.appendItem(CheckBox('Toggel Menu style', tms, True))
-menu.appendItem(stylemenu) # SubMenu have some issues
+menu.appendItem(stylemenu) # sub-menu fixed
 menu.appendItem(Button('Exit', exit))
 
 menu.run_pool()
