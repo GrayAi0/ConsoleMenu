@@ -1,6 +1,6 @@
 
 # Change log
-## ConsoleMenu v1.0.0<
+## ConsoleMenu v1.0.0
 
 - fixed: Sub-menu issues.
 - fixed: Performance improved.
